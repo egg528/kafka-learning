@@ -1,0 +1,6 @@
+
+spring:
+  kafka:
+    listener:
+      type: BATCH  # type?? 2?? ??? ??. BATCH(default) / SINGLE
+      ack-mode: MANUAL_IMMEDIATE # ack-mode?? 7?? ??? ??. RECORD, BATCH, TIME, COUNT, COUNT_TIME, MANUAL, MANUAL_IMMEDIATE;

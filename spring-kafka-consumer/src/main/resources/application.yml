@@ -1,6 +1,6 @@
-
 spring:
   kafka:
     listener:
-      type: BATCH  # type?? 2?? ??? ??. BATCH(default) / SINGLE
-      ack-mode: MANUAL_IMMEDIATE # ack-mode?? 7?? ??? ??. RECORD, BATCH, TIME, COUNT, COUNT_TIME, MANUAL, MANUAL_IMMEDIATE;
+      ack-mode: MANUAL_IMMEDIATE # ack-mode: RECORD, BATCH, TIME, COUNT, COUNT_TIME, MANUAL, MANUAL_IMMEDIATE
+    consumer:
+      enable-auto-commit: false # true -> commit by auto.commit.interval.ms

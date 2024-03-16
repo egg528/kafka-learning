@@ -8,9 +8,9 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class RecordListeners {
     private final static Logger logger = LoggerFactory.getLogger(RecordListeners.class);
 
@@ -19,6 +19,8 @@ public class RecordListeners {
 //        logger.info("Received Message: {}", message);
 //    }
 
+    // MANUAL AckMode를 사용할 경우 Acknowledgment를 제공받을 수 있다.
+    // TODO: Acknowledgment의 정확한 역할 알아보기
 //    @KafkaListener(topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
 //    public void listenWithExplictedContainerFactory(
 //            String message, Acknowledgment ack) {
@@ -47,6 +49,5 @@ public class RecordListeners {
 //        logger.info("Received Record Offset: {}", meta.offset());
 //        logger.info("Received Message: {}", message);
 //    }
-
 
 }

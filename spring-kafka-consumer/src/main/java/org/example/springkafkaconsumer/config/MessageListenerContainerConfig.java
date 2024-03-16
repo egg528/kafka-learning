@@ -39,7 +39,9 @@ public class MessageListenerContainerConfig {
             ConsumerFactory<String, String> consumerFactory) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
-        factory.setBatchListener(true); // poll()을 통해 가져온 데이터를 Listener가 읽는 방식 Batch / Single
+        // poll()을 통해 가져온 데이터를 Listener가 읽는 방식 Batch / Single
+        // Batch Listener를 사용하려면 필수적으로 true 설정을 해줘야 한다.
+        factory.setBatchListener(true);
         factory.getContainerProperties()
                 .setPollTimeout(Duration.ofSeconds(5).toMillis());
 

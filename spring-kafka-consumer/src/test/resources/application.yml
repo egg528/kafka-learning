@@ -4,6 +4,7 @@ spring:
       ack-mode: MANUAL_IMMEDIATE # ack-mode: RECORD, BATCH, TIME, COUNT, COUNT_TIME, MANUAL, MANUAL_IMMEDIATE
     consumer:
       enable-auto-commit: false # true -> commit by auto.commit.interval.ms
+
 kafka:
   servers: localhost:9092
   group-id: test

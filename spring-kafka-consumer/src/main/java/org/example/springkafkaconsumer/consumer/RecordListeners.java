@@ -30,14 +30,13 @@ public class RecordListeners {
     // MANUAL AckMode를 사용할 경우 Acknowledgment를 제공받을 수 있다.
     // TODO: Acknowledgment의 정확한 역할 알아보기
 //    @KafkaListener(topics = "test")
-//    public void listenWithExplictedContainerFactory(
-//            String message, Acknowledgment ack) {
+//    public void listen(String message, Acknowledgment ack) {
 //        logger.info("Received Message: {}", message);
 //    }
 
     // @Header를 통해서 원하는 Metadata에 접근할 수 있다
 //    @KafkaListener(topics = "test")
-//    public void listenWithExplictedContainerFactory(
+//    public void listen(
 //            @Payload String message,
 //            @Header(name = KafkaHeaders.RECEIVED_KEY, required = false) Integer key,
 //            @Header(KafkaHeaders.RECEIVED_PARTITION) int partition,
@@ -51,7 +50,7 @@ public class RecordListeners {
 
     // ConsumerRecordMetadata를 통해 Metadata에 접근할 수도 있다.
 //    @KafkaListener(topics = "test")
-//    public void listenWithExplictedContainerFactory(
+//    public void listen(
 //            String message,
 //            ConsumerRecordMetadata meta
 //    ) {
@@ -59,9 +58,9 @@ public class RecordListeners {
 //        logger.info("Received Message: {}", message);
 //    }
 
-    @KafkaListener(topics = "test")
+    @KafkaListener(topics = "test", containerFactory = "concurrentKafkaListenerContainerFactory")
     @Transactional
-    public void listenWithExplictedContainerFactory(TestEvent event) throws Exception {
+    public void listen(TestEvent event) throws Exception {
         if (event.field2().equals("7")) {
             System.out.println(Thread.currentThread().getName());
             throw new Exception("==========consume fail==========");

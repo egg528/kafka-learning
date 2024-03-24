@@ -1,5 +1,6 @@
 package org.example.springkafkaconsumer.config.consumer;
 
+import org.springframework.kafka.listener.ConsumerRecordRecoverer;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
 
@@ -8,5 +9,9 @@ public class BlockingRetryErrorHandler extends DefaultErrorHandler {
 
     public BlockingRetryErrorHandler() {
         super(backOff);
+    }
+
+    public BlockingRetryErrorHandler(ConsumerRecordRecoverer recordRecoverer) {
+        super(recordRecoverer, backOff);
     }
 }

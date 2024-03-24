@@ -3,6 +3,7 @@ package org.example.springkafkaconsumer.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.example.springkafkaconsumer.domain.TestEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -59,6 +60,17 @@ public class BatchListeners {
 //    public void listen(ConsumerRecords<Integer, String> records) {
 //        for (ConsumerRecord<Integer, String> record : records) {
 //            logger.info(record.value());
+//        }
+//    }
+
+//    @KafkaListener(topics = "test")
+//    public void listen(List<TestEvent> events) throws Exception {
+//        logger.info("{}", events.size());
+//        for (TestEvent event : events) {
+//            if (event.field2().equals("7")) {
+//                throw new Exception("consume fail");
+//            }
+//            logger.info("field1: {}, field2: {}", event.field1(), event.field2());
 //        }
 //    }
 }

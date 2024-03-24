@@ -1,10 +1,15 @@
 package org.example.springkafkaconsumer.config.consumer;
 
+import org.apache.kafka.common.TopicPartition;
+import org.example.springkafkaconsumer.domain.TestEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.KafkaOperations;
 import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
+import org.springframework.kafka.support.converter.BatchMessagingMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 
 import java.time.Duration;
@@ -29,10 +34,11 @@ public class MessageListenerContainerConfig {
     // Thread 개수만큼의 partition을 동시에 처리할 수 있게 된다.
     // 1개의 Thread는 한번에 1개의 partition으로부터 poll()을 할 수 있고 데이터를 처리한다.
     // 때문에 여기서 설정하는 concurrency는 1개의 partition에서 가져온 message들을 동시 처리하는 것이 아님
-    // Bean 네이밍 기반 의존성 주입
-    @Bean("kafkaListenerContainerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(
-            ConsumerFactory<String, String> consumerFactory) {
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, String> concurrentKafkaListenerContainerFactory(
+            ConsumerFactory<String, String> consumerFactory,
+            KafkaOperations<String, TestEvent> template
+    ) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
 
@@ -40,12 +46,26 @@ public class MessageListenerContainerConfig {
         // Batch Listener를 사용하려면 필수적으로 true 설정을 해줘야 한다.
         // 성능 차이 확인해볼 것
         factory.setBatchListener(false);
+
+        factory.setRecordMessageConverter(new StringJsonMessageConverter());
+        // factory.setBatchMessageConverter(new BatchMessagingMessageConverter(new StringJsonMessageConverter()));
+
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
+
         factory.getContainerProperties()
                .setPollTimeout(Duration.ofSeconds(5).toMillis());
+
         // factory.setConcurrency(3); // 3개의 ConcurrentMessageListenerContainer 생성
-        factory.setRecordMessageConverter(new StringJsonMessageConverter());
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
-        factory.setCommonErrorHandler(new BlockingRetryErrorHandler());
+
+        factory.setCommonErrorHandler(
+                new BlockingRetryErrorHandler(
+                    new DeadLetterPublishingRecoverer(
+                            template,
+                            ((consumerRecord, e) -> new TopicPartition(consumerRecord.topic() + "_dlt", -1))
+                    )
+                )
+        );
+
         return factory;
     }
 }

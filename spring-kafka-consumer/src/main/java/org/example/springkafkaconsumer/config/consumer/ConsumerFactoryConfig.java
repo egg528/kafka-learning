@@ -21,7 +21,7 @@ public class ConsumerFactoryConfig {
     private final KafkaConsumerProps kafkaConsumerProps;
     private final KafkaBrokerProps kafkaBrokerProps;
     @Bean // The strategy to produce a Consumer instance(s).
-    public ConsumerFactory<String, String> consumerFactory() {
+    public ConsumerFactory<String, String> kafkaListenerContainerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBrokerProps.getServer());
         props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConsumerProps.getGroupId());

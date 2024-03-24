@@ -1,5 +1,6 @@
 package org.example.springkafkaconsumer.consumer;
 
+import org.example.springkafkaconsumer.domain.TestEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -41,13 +42,11 @@ public class RecordListeners {
 //    }
 
     // ConsumerRecordMetadata를 통해 Metadata에 접근할 수도 있다.
-    @KafkaListener(topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
-    public void listenWithExplictedContainerFactory(
-            String message,
-            ConsumerRecordMetadata meta
-    ) {
-        logger.info("Received Record Offset: {}", meta.offset());
-        logger.info("Received Message: {}", message);
+    @KafkaListener(
+            topics = "test",
+            containerFactory = "concurrentKafkaMessageListenerContainerFactory"
+    )
+    public void listenWithExplictedContainerFactory(TestEvent event) {
+        logger.info("field1: {}, field2: {}", event.field1(), event.field2());
     }
-
 }

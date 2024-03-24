@@ -55,10 +55,10 @@ public class BatchListeners {
 
 
     // ConsumerRecords 객체를 활용해 poll()을 통해 얻은 ConsumerRecord들을 Iterable형태로 받을 수 있다.
-    @KafkaListener(id = "list", topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
-    public void listen(ConsumerRecords<Integer, String> records) {
-        for (ConsumerRecord<Integer, String> record : records) {
-            logger.info(record.value());
-        }
-    }
+//    @KafkaListener(id = "list", topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
+//    public void listen(ConsumerRecords<Integer, String> records) {
+//        for (ConsumerRecord<Integer, String> record : records) {
+//            logger.info(record.value());
+//        }
+//    }
 }

@@ -24,8 +24,6 @@ public class ConsumerFactoryConfig {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConsumerProps.getGroupId());
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false"); // default가 false
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 500); // Batch방식으로 데이터를 읽을 때 1회 최대 개수 제한
         return new DefaultKafkaConsumerFactory<>(
                 props,

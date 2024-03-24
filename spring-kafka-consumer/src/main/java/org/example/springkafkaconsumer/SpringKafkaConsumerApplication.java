@@ -23,9 +23,8 @@ public class SpringKafkaConsumerApplication {
     ) {
         return args -> {
             for (int i = 0; i < 10; i++) {
-                producer.send("test", new TestEvent("1", "2"));
+                producer.send("test", new TestEvent("1", String.valueOf(i)));
             }
-
         };
     }
 }

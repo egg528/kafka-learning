@@ -1,4 +1,4 @@
-package org.example.springkafkaconsumer.config;
+package org.example.springkafkaconsumer.config.props;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties("kafka")
-public class KafkaConsumerProps {
-    private String servers;
-    private String groupId;
-    private String topic;
+@ConfigurationProperties("kafka.broker")
+public class KafkaBrokerProps {
+    private String server;
 }

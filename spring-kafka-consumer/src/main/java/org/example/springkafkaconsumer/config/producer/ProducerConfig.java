@@ -1,7 +1,8 @@
-package org.example.springkafkaconsumer.config;
+package org.example.springkafkaconsumer.config.producer;
 
-import org.apache.kafka.clients.producer.ProducerConfig;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.example.springkafkaconsumer.config.props.KafkaBrokerProps;
 import org.example.springkafkaconsumer.domain.TestEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,20 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class ProducerConfigForTest {
-
+@RequiredArgsConstructor
+public class ProducerConfig {
+    private final KafkaBrokerProps kafkaBrokerProps;
     @Bean
     public ProducerFactory<String, TestEvent> factory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBrokerProps.getServer());
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
         return new DefaultKafkaProducerFactory<>(props);
-    }
-
-    @Bean
-    public KafkaTemplate<String, TestEvent> kafkaTemplate(){
-        return new KafkaTemplate<>(factory());
     }
 }

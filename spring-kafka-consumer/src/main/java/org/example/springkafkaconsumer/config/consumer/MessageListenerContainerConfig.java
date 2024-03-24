@@ -1,25 +1,13 @@
-package org.example.springkafkaconsumer.config;
+package org.example.springkafkaconsumer.config.consumer;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.example.springkafkaconsumer.domain.TestEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.MessageListener;
-import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.kafka.support.converter.StringJsonMessageConverter;
-import org.springframework.kafka.support.mapping.DefaultJackson2JavaTypeMapper;
-import org.springframework.kafka.support.mapping.Jackson2JavaTypeMapper;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 public class MessageListenerContainerConfig {
@@ -41,8 +29,9 @@ public class MessageListenerContainerConfig {
     // Thread 개수만큼의 partition을 동시에 처리할 수 있게 된다.
     // 1개의 Thread는 한번에 1개의 partition으로부터 poll()을 할 수 있고 데이터를 처리한다.
     // 때문에 여기서 설정하는 concurrency는 1개의 partition에서 가져온 message들을 동시 처리하는 것이 아님
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> concurrentKafkaMessageListenerContainerFactory(
+    // Bean 네이밍 기반 의존성 주입
+    @Bean("kafkaListenerContainerFactory")
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(
             ConsumerFactory<String, String> consumerFactory) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
@@ -55,6 +44,8 @@ public class MessageListenerContainerConfig {
                .setPollTimeout(Duration.ofSeconds(5).toMillis());
         // factory.setConcurrency(3); // 3개의 ConcurrentMessageListenerContainer 생성
         factory.setRecordMessageConverter(new StringJsonMessageConverter());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
+        factory.setCommonErrorHandler(new BlockingRetryErrorHandler());
         return factory;
     }
 }

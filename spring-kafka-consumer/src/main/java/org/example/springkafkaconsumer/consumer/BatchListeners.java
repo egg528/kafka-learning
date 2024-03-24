@@ -20,14 +20,14 @@ public class BatchListeners {
 
     // message를 List로 받아오게 된다.
     // id값은 Kafka Consumer group.idf를 뜻한다.
-//    @KafkaListener(id = "list", topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
+//    @KafkaListener(id = "list", topics = "test")
 //    public void listen(List<String> list) {
 //        logger.info(list); // [1, 2, 3, 1, 3, 1, 3, 1, 3]
 //    }
 
 
     // Header 정보들도 List로 받아오게 된다.
-//    @KafkaListener(id = "list", topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
+//    @KafkaListener(id = "list", topics = "test")
 //    public void listen(List<String> list,
 //                       @Header(KafkaHeaders.RECEIVED_KEY) List<Integer> keys,
 //                       @Header(KafkaHeaders.RECEIVED_PARTITION) List<Integer> partitions,
@@ -45,7 +45,7 @@ public class BatchListeners {
 
 
     // ConsumerRecord 객체를 활용해 key, value와 다양한 KafkaHeader값을 단일 객체로 받아 처리할 수 있다.
-//    @KafkaListener(id = "list", topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
+//    @KafkaListener(id = "list", topics = "test")
 //    public void listen(List<ConsumerRecord<Integer, String>> list) {
 //
 //        list.stream()
@@ -55,7 +55,7 @@ public class BatchListeners {
 
 
     // ConsumerRecords 객체를 활용해 poll()을 통해 얻은 ConsumerRecord들을 Iterable형태로 받을 수 있다.
-//    @KafkaListener(id = "list", topics = "test", containerFactory = "concurrentKafkaMessageListenerContainerFactory")
+//    @KafkaListener(id = "list", topics = "test")
 //    public void listen(ConsumerRecords<Integer, String> records) {
 //        for (ConsumerRecord<Integer, String> record : records) {
 //            logger.info(record.value());
